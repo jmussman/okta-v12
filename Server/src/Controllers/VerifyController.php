@@ -12,15 +12,24 @@ use Src\Services\VerifierService;
 class VerifyController
 {
 
-	private $verifierService;
+	private ?VerifierService $verifierService;
 
-	public function __construct(VerifierService $verifierService) {
+	public function __construct(VerifierService $verifierService = NULL) {
 
 		$this->verifierService = $verifierService;
 	}
 
     public function index($uri)
     {
+
+		if (!$this->verifierservice) {
+
+			// This is called in production so use the factory to build the service with the API token or
+			// credentials we are given.
+
+			$this->verifierService = ServiceFactory::build($url, $apikey);			// We need to build this at invokation time, not before.
+		}
+
         $report = [];
 
         $this->respondOK($report);

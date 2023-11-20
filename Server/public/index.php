@@ -9,7 +9,7 @@ require "../bootstrap.php";
 use Src\Controllers\VerifyEssentialsController;
 use Src\Factories\ServiceFactory;
 
-// Always send CORS.
+// Seup to always return CORS headers so this API can work.
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
@@ -45,6 +45,5 @@ if (! $routeFound) {
 
 $methodName = $route['controller_method'];
 
-$verifierService = ServiceFactory::build($url, $apikey);			// We need to build this at invokation time, not before.
-$controller = new VerifyEssentialsController($verifierService);
+$controller = new VerifyEssentialsController();
 $controller->$methodName($uriParts);
