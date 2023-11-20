@@ -1,0 +1,3 @@
+1. Add logging, so we can see where things went wrong.
+2. Add the schema to the url, in the form: /verify/schema/apikey/orgurl, fail on missing schema, no key, no url.
+3. Add access token support for client verification.

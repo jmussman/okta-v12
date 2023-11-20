@@ -1,0 +1,126 @@
+{
+	"parts": [
+		{
+			"title": "Part 1",
+			"steps": [
+				{
+					"title": "Okta Admin",
+					"action": {
+						"filter": "eventType eq \"user.lifecycle.create\" and target.alternateId sw \"okta.admin@oktaice\"",
+						"cache.oktaAdmin.id": "target.id",
+						"cache.oktaAdmin.login": "target.alternateId"
+					}
+				},
+				{
+					"title": "John Smith",
+					"action": {
+						"filter": "eventType eq \"user.lifecycle.create\" and target.alternateId sw \"john.smith@oktaice\"",
+						"cache.johnSmith.id": "target.id",
+						"cache.johnSmith.login": "target.alternateId"
+					}
+				},
+				{
+					"title": "John Smith Profile Update",
+					"action": {
+						"filter": "eventType eq \"user.account.update_profile\" and target.id eq \"cache.johnSmith.id\" and system.debugContext.debugData.changedAttributes eq \"costCenter\""
+					}
+				},
+				{
+					"title": "Sally Field",
+					"action": {
+						"filter": "eventType eq \"user.lifecycle.create\" and target.alternateId sw \"sally.field@oktaice\"",
+						"cache.sallyField.id": "target.id",
+						"cache.sallyField.login": "target.alternateId"
+					}
+				},
+				{
+					"title": "Sally Field Profile Update",
+					"action": {
+						"filter": "eventType eq \"user.account.update_profile\" and target.id eq \"cache.johnSmith.id\" and system.debugContext.debugData.changedAttributes eq \"costCenter\""
+					}
+				},
+				{
+					"title": "Brenda Adams",
+					"action": {
+						"filter": "eventType eq \"user.lifecycle.create\" and target.alternateId sw \"brenda.adams@oktaice\"",
+						"cache.brendaAdams.id": "target.id",
+						"cache.brendaAdams.login": "target.alternateId"
+					}
+				},
+				{
+					"title": "Marketing Group",
+					"action": {
+						"filter": "eventType eq \"group.lifecycle.create\" and target.displayName eq \"Marketing\"",
+						"cache.marketingGroup.id": "target.id"
+					}
+				},
+				{
+					"title": "Marketing Group add John Smith",
+					"action": {
+						"filter": "eventType eq \"group.user_membership.add\" and target.id eq \"cache.marketingGroup.id\" and target.id eq \"cache.johnSmith.id\""
+					}
+				},
+				{
+					"title": "R&D Group",
+					"action": {
+						"filter": "eventType eq \"group.lifecycle.create\" and target.displayName eq \"R&D\"",
+						"cache.rdGroup.id": "target.id"
+					}
+				},
+				{
+					"title": "R&D Group add Sally Field",
+					"action": {
+						"filter": "eventType eq \"group.user_membership.add\" and target.id eq \"cache.marketingGroup.id\" and target.id eq \"cache.sallyField.id\""
+					}
+				},
+				{
+					"title": "Remote Contractors Group",
+					"action": {
+						"filter": "eventType eq \"group.lifecycle.create\" and target.displayName eq \"Remote Contractors\"",
+						"cache.remoteContractorsGroup.id": "target.id"
+					}
+				},
+				{
+					"title": "Remote Contractors Group Rule",
+					"action": {
+						"api": "/groups/rules",
+						"search": "costCenter",
+						"cache.remoteContractorsGroupRule.id": "id"
+					}
+				},
+				{
+					"title": "Remote Contractors add John Smith",
+					"action": {
+						"filter": "eventType eq \"group.user_membership.add\" and debugContext.debugData.triggeredByGroupRuleId eq \"cache.remoteContractorsGroupRule.id\" and target.id eq \"cache.johnSmith.id\""
+					}
+				},
+				{
+					"title": "Remote Contractors add Sally Field",
+					"action": {
+						"filter": "eventType eq \"group.user_membership.add\" and debugContext.debugData.triggeredByGroupRuleId eq \"cache.remoteContractorsGroupRule.id\" and target.id eq \"cache.sallyField.id\""
+					}
+				},
+				{
+					"title": "Remote Contractors do not add Brenda Adams",
+					"not": {
+						"action": {
+							"filter": "eventType eq \"group.user_membership.add\" and debugContext.debugData.triggeredByGroupRuleId eq \"cache.remoteContractorsGroupRule.id\" and target.id eq \"cache.brendaAdams.id\""
+						}
+					}
+				},
+				{
+					"title": "Okta Admin grant Okta Admin",
+					"action": {
+						"filter": "eventType eq \"user.account.privilege.grant\" and target.id eq \"cache.oktaAdmin.id\" and debugContext.debugData.PrivilegeGrantded eq \"Super administrator\""
+					}
+				},
+				{
+					"title": "Brenda Adams grant Report Admin",
+					"action": {
+						"filter": "eventType eq \"user.account.privilege.grant\" and target.id eq \"cache.brendaAdams.id\" and debugContext.debugData.PrivilegeGrantded eq \"Report administrator\""
+					}
+				}
+			]
+		}
+	]
+}
